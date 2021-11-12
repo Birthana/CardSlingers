@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c985f349f130484b82813c6d1614451, type: 3}
+  m_Name: Fireball
+  m_EditorClassIdentifier: 
+  shield: 5
+  damage: 10
+  description: Fire a Range projectile. Deals {0} damage.
+  testPrefab: {fileID: 8442016063060040407, guid: e0b9453949fd8e648bf7f1961d74fb48, type: 3}
+  projectileSpeed: 2
+  projectileLifeTime: 1
