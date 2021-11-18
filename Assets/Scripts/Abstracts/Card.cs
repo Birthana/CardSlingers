@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Card : ScriptableObject, ICastable
 {
+    public Trigger trigger;
     public int shield;
     public int damage;
     [TextArea(3, 5)]

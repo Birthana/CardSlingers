@@ -5,29 +5,48 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 1f;
+    private Animator anim;
+    private string currentState;
+
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+        currentState = "Player_Walk_Down";
+    }
 
     // Update is called once per frame
     void Update()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        
-        if (h == 1)
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+
+        Vector3 dir = new Vector3(h, v, 0).normalized;
+
+        transform.Translate(dir * moveSpeed * Time.deltaTime, Space.World);
+
+        if (h > 0)
         {
-            transform.Translate(Vector2.right * moveSpeed * Time.deltaTime, Space.World);
+            ChangeAnimation("Player_Walk_Right");
         }
-        else if (h == -1)
+        else if (h < 0)
         {
-            transform.Translate(Vector2.left * moveSpeed * Time.deltaTime, Space.World);
+            ChangeAnimation("Player_Walk_Left");
         }
-        
-        if (v == 1)
+        else if (v > 0)
         {
-            transform.Translate(Vector2.up * moveSpeed * Time.deltaTime, Space.World);
+            ChangeAnimation("Player_Walk_Up");
         }
-        else if (v == -1)
+        else if (v < 0)
         {
-            transform.Translate(Vector2.down * moveSpeed * Time.deltaTime, Space.World);
+            ChangeAnimation("Player_Walk_Down");
         }
+    }
+
+    private void ChangeAnimation(string state)
+    {
+        if (state.Equals(currentState))
+            return;
+        anim.Play(state);
+        currentState = state;
     }
 }

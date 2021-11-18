@@ -1,20 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MageHand : MonoBehaviour
 {
-    public CardDisplay cardPrefab;
+    public Action<Card> OnAddCard;
+    public Action<int> OnRemoveCard;
+    public Action<List<Card>> OnHandChange;
+    public Action<int> OnCurrentIndexChange;
 
     public List<Card> deck = new List<Card>();
-    public List<CardDisplay> hand = new List<CardDisplay>();
+    public List<Card> hand = new List<Card>();
 
-    public float CARD_SPACING = 5f;
+    [SerializeField]
     private int currentIndex = 0;
+
+    private void Start()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Draw();
+        }
+    }
 
     private void Update()
     {
         CheckCastCard();
+        ChangeCurrentIndex();
     }
 
     private void CheckCastCard()
@@ -23,49 +36,59 @@ public class MageHand : MonoBehaviour
         {
             if (hand.Count == 0)
                 return;
-            hand[currentIndex].card.Cast();
+            hand[currentIndex].Cast();
             RemoveHandCard(currentIndex);
         }
     }
 
-    public void RemoveHandCard(int index)
+    private void ChangeCurrentIndex()
     {
-        CardDisplay selectedCard = hand[index];
-        hand.RemoveAt(index);
-        Destroy(selectedCard.gameObject);
-        DisplayHand();
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        {
+            currentIndex =  Mathf.Min(currentIndex + 1, Mathf.Max(0, hand.Count - 1));
+            OnCurrentIndexChange(currentIndex);
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+        {
+            currentIndex = Mathf.Max(0, currentIndex - 1);
+            OnCurrentIndexChange(currentIndex);
+        }
     }
 
     public void Draw()
     {
+        if (deck.Count == 0)
+            return;
         Card topOfDeck = deck[0];
         deck.RemoveAt(0);
-        CardDisplay newCard = Instantiate(cardPrefab, transform);
-        newCard.card = topOfDeck;
-        newCard.DisplayText();
-        hand.Add(newCard);
-        DisplayHand();
+        hand.Add(topOfDeck);
+        OnAddCard(topOfDeck);
+        OnHandChange(hand);
     }
 
-    public void DisplayHand()
+    public void RemoveHandCard(int index)
     {
-        for (int i = 0; i < hand.Count; i++)
-        {
-            float transformAmount = ((float)i) - ((float)hand.Count - 1) / 2;
-            float angle = transformAmount * 3.0f;
-            Vector3 position = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, 0) * CARD_SPACING;
-            hand[i].transform.localPosition = position;
-        }
+        hand.RemoveAt(index);
+        OnRemoveCard(index);
+        OnHandChange(hand);
+        currentIndex = Mathf.Max(0, currentIndex - 1);
+        OnCurrentIndexChange(currentIndex);
+    }
+
+    public Trigger TriggerCheck()
+    {
+        Trigger trigger = deck[0].trigger;   
+        Draw();
+        return trigger;
     }
 
     public void EmptyHand()
     {
+        hand = new List<Card>();
         int count = hand.Count;
         for (int i = 0; i < count; i++)
         {
-            CardDisplay card = hand[0];
-            hand.RemoveAt(0);
-            DestroyImmediate(card.gameObject);
+            OnRemoveCard(0);
         }
     }
 }

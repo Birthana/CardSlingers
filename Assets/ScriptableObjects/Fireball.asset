@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c985f349f130484b82813c6d1614451, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
+  trigger: {fileID: 11400000, guid: ff94dca1a0fbe7d44a6620aa161f4e73, type: 2}
   shield: 5
   damage: 10
   description: Fire a Range projectile. Deals {0} damage.

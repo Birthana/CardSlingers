@@ -56,11 +56,11 @@ public class DeckEditor : EditorWindow
             }
         }
 
-        if (GUILayout.Button("Display Start Hand"))
-        {
-            for (int i = 0; i < 5; i++)
-                deck.Draw();
-        }
+        //if (GUILayout.Button("Display Start Hand"))
+        //{
+        //    for (int i = 0; i < 5; i++)
+        //        deck.Draw();
+        //}
 
         if(GUILayout.Button("Empty Hand"))
         {
