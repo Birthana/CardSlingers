@@ -17,6 +17,6 @@ public class Health : MonoBehaviour
     {
         currentHealth = Mathf.Max(0, currentHealth - damage);
         if (currentHealth == 0)
-            Debug.Log($"Enemy is dead.");
+            Destroy(gameObject);
     }
 }

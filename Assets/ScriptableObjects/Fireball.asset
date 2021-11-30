@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trigger: {fileID: 11400000, guid: ff94dca1a0fbe7d44a6620aa161f4e73, type: 2}
   shield: 5
-  damage: 10
+  damage: 20
   description: Fire a Range projectile. Deals {0} damage.
-  testPrefab: {fileID: 8442016063060040407, guid: e0b9453949fd8e648bf7f1961d74fb48, type: 3}
-  projectileSpeed: 2
-  projectileLifeTime: 1
+  fireballPrefab: {fileID: -7451147395964241624, guid: e0b9453949fd8e648bf7f1961d74fb48, type: 3}
+  projectileSpeed: 3
+  projectileLifeTime: 2

@@ -10,5 +10,7 @@ public abstract class Card : ScriptableObject, ICastable
     [TextArea(3, 5)]
     public string description;
 
+    public virtual bool CanCast() { return true; }
+
     public virtual void Cast() { }
 }

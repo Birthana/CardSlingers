@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class HandUI : MonoBehaviour
 {
+    public GameObject handUI;
     public CardDisplay cardPrefab;
+    public float slowDuration = 10f;
+
     private MageHand playerHand;
     private List<CardDisplay> hand = new List<CardDisplay>();
     private int previousIndex = 0;
@@ -14,6 +17,9 @@ public class HandUI : MonoBehaviour
     [SerializeField]
     private int verticalOffset = 1;
 
+    private Coroutine fadeCoroutine;
+    private Coroutine slowCoroutine;
+
     private void Awake()
     {
         playerHand = GetComponent<MageHand>();
@@ -21,11 +27,13 @@ public class HandUI : MonoBehaviour
         playerHand.OnRemoveCard += RemoveCard;
         playerHand.OnHandChange += DisplayHand;
         playerHand.OnCurrentIndexChange += DisplayCurrentCard;
+        playerHand.OnStartScrolling += StartSlowMode;
+        playerHand.OnStopScrolling += StopSlowMode;
     }
 
     public void CreateCard(Card cardInfo)
     {
-        CardDisplay newCard = Instantiate(cardPrefab, transform);
+        CardDisplay newCard = Instantiate(cardPrefab, handUI.transform);
         newCard.card = cardInfo;
         newCard.DisplayText();
         hand.Add(newCard);
@@ -33,6 +41,7 @@ public class HandUI : MonoBehaviour
 
     public void DisplayHand(List<Card> cards)
     {
+        StartFade(); 
         for (int i = 0; i < cards.Count; i++)
         {
             float transformAmount = ((float)i) - ((float)hand.Count - 1) / 2;
@@ -53,9 +62,54 @@ public class HandUI : MonoBehaviour
 
     public void RemoveCard(int index)
     {
+        StartFade();
         CardDisplay cardToRemove = hand[index];
         hand.RemoveAt(index);
         DestroyImmediate(cardToRemove.gameObject);
         previousIndex = 0;
+    }
+
+    private void StartFade()
+    {
+        if (slowCoroutine != null)
+            return;
+        handUI.SetActive(true);
+        if (fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+        fadeCoroutine = StartCoroutine(Leaving());
+    }
+
+    IEnumerator Leaving()
+    {
+        yield return new WaitForSecondsRealtime(1.5f);
+        if (fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+        handUI.SetActive(false);
+    }
+
+    private void StartSlowMode()
+    {
+        if (slowCoroutine != null)
+            StopCoroutine(slowCoroutine);
+        if (fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+        handUI.SetActive(true);
+        slowCoroutine = StartCoroutine(Slowing());
+    }
+
+    IEnumerator Slowing()
+    {
+        Time.timeScale = 0.4f;
+        yield return new WaitForSecondsRealtime(slowDuration);
+        StopSlowMode();
+    }
+
+    public bool StopSlowMode()
+    {
+        if (slowCoroutine != null)
+            StopCoroutine(slowCoroutine);
+        handUI.SetActive(false);
+        Time.timeScale = 1.0f;
+        return false;
     }
 }

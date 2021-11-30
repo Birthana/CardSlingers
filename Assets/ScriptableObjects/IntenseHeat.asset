@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcb26fd8d2a84974cb022aa5cd152f46, type: 3}
+  m_Name: IntenseHeat
+  m_EditorClassIdentifier: 
+  trigger: {fileID: 0}
+  shield: 10
+  damage: 0
+  description: Point & Click Stun for 3 Sec.
+  stunDuration: 3
